@@ -89,8 +89,12 @@ while True:
             mean_h, var_h, std_h = mean_variance_std(hist_h)
 
             msg = b'Current Temperature: {0}C\t\tCurrent Humidity: {1}%\nTemperature Maximum: {2}C\t\tHumidity Maximum: {3}%\nTemperature Minimum: {4}C\t\tHumidity Minimum: {5}%\nTemperature Mean: {6:3.4f}\t\tHumidity Mean: {7:3.4f}\nTemperature Variance: {8:3.4f}\t\tHumidity Variance: {9:3.4f}\nTemperature Standard Deviation: {10:3.4f}\tHumidity Standard Deviation: {11:3.4f}\n'.format(t, h, max_t, max_h, min_t, min_h, mean_t, mean_h, var_t, var_h, std_t, std_h)
-            client.publish(topic, msg)
             print(msg)
+
+            try:
+                client.publish(topic, msg)
+            except:
+                print('Failed to publish the message to the MQTT broker.\n')
         else:
             print('Invalid sensor reading.')
     except OSError:
