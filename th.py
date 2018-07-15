@@ -45,9 +45,8 @@ def mean_variance_std(deq):
         return mean, 0, 0
 
 server = 'test.mosquitto.org'
-client_id = 'ESP32_DHT11_Sensor'
+client_id = 'ESP32_DHT11_BOULA'
 client = MQTTClient(client_id, server)
-topic = b'cse1/train1/th'
 try:
     client.connect()
 except:
@@ -92,7 +91,18 @@ while True:
             print(msg)
 
             try:
-                client.publish(topic, msg)
+                client.publish(b'cse1/train/temperature/current', b'{0}C'.format(t))
+                client.publish(b'cse1/train/temperature/max', b'{0}C'.format(max_t))
+                client.publish(b'cse1/train/temperature/min', b'{0}C'.format(min_t))
+                client.publish(b'cse1/train/temperature/mean', b'{0:3.4f}'.format(mean_t))
+                client.publish(b'cse1/train/temperature/variance', b'{0:3.4f}'.format(var_t))
+                client.publish(b'cse1/train/temperature/std', b'{0:3.4f}'.format(std_t))
+                client.publish(b'cse1/train/humidity/current', b'{0}%'.format(h))
+                client.publish(b'cse1/train/humidity/max', b'{0}%'.format(max_h))
+                client.publish(b'cse1/train/humidity/min', b'{0}%'.format(min_h))
+                client.publish(b'cse1/train/humidity/mean', b'{0:3.4f}%'.format(mean_h))
+                client.publish(b'cse1/train/humidity/variance', b'{0:3.4f}%'.format(var_h))
+                client.publish(b'cse1/train/humidity/std', b'{0:3.4f}%'.format(std_h))
             except:
                 print('Failed to publish the message to the MQTT broker.\n')
         else:
